@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Taking App</title>
+</head>
+<body>
+  
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Enter username" />
+  <button onclick="login()">Login</button>
+  
+  <h1>Notes</h1>
+  <ul id="notes-list"></ul>
+  <textarea id="note-content" placeholder="write a note.."></textarea>
+  <button onclick="createNote()">submit</button>
+  
+  <script>
+      async function login() {
+          const username = document.getElementById("username").value;
+          const response = await window.api.login(username);
+          if (response.success) {
+              alert("Login successful!");
+              loadNotes(); // Fetch notes after login
+          } else {
+              alert(response.message);
+          }
+        }
+
+        async function loadNotes() {
+            const notes = await window.api.fetchNotes();
+            const notesList = document.getElementById("notes-list");
+            notesList.innerHTML = "";
+            notes.forEach(note => {
+                const li = document.createElement("li");
+                li.textContent = note.content;
+                notesList.appendChild(li);
+            });
+        }
+
+        async function createNote() {
+            const content = document.getElementById("note-content").value;
+            await window.api.createNote(content);
+            document.getElementById("note-content").value = "";
+            loadNotes();
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>
