@@ -34,7 +34,25 @@ ipcMain.handle("login", async (_, username) => {
     }
   });
   
-  ipcMain.handle("fetch-notes", async () => {
+
+  ipcMain.handle("fetch-profile" , async () => {
+    try {
+        const cookies = await session.defaultSession.cookies.get({ url: "http://localhost:8080" });
+        const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
+
+        const response = await axios.get("http://localhost:8080/api/profile/me", {
+            headers: { Cookie: cookieString },
+            withCredentials: true,
+          });
+      
+          console.log("Notes Response Headers:", response.headers);
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching notes:", error.response?.data || error.message);
+          return [];
+        }
+  })
+  ipcMain.handle("fetch-note", async () => {
     try {
       const cookies = await session.defaultSession.cookies.get({ url: "http://localhost:8080" });
       const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");

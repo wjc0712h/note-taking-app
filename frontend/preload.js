@@ -1,8 +1,14 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
+  //auth
   login: (username) => ipcRenderer.invoke("login", username),
-  fetchNotes: () => ipcRenderer.invoke("fetch-notes"),
+
+  //profile
+  fetchProfile: () => ipcRenderer.invoke("fetch-profile"),
+
+  //note
+  fetchNotes: () => ipcRenderer.invoke("fetch-note"),
   createNote: (content) => ipcRenderer.invoke("create-note", content),
 });
 

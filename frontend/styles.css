@@ -1,0 +1,128 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #121212;
+    color: #e0e0e0;
+    display: flex;
+    height: 100vh;
+}
+
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar {
+    width: 150px;
+    background: #1e1e1e;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+.sidebar #profile {
+    font-size: 23px;
+    color: #a38303;
+}
+
+#login {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content; 
+    color: #e0e0e0;
+    border-radius: 5px;
+    scale: 0.8;
+    transform-origin: top left;
+}
+
+#login h2 {
+    font-size: 15px;
+}
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#username {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    resize: none;
+    outline: none;
+}
+
+#login button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    text-align: center;
+    border: none;
+    background: #646464;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar ul li:hover {
+    background: #444;
+}
+
+.main {
+    flex-grow: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.main textarea {
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    resize: none;
+    outline: none;
+}
+
+.main button {
+    margin-top: 20px;
+    padding: 5px 10px;
+    font-size: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #a38303;
+    color: black;
+    cursor: pointer;
+    transition: background 0.3s;
+}

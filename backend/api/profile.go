@@ -26,7 +26,7 @@ func handleGetProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterProfileRoutes(r *mux.Router) {
-	userRouter := r.PathPrefix("/api/user").Subrouter()
+	userRouter := r.PathPrefix("/api/profile").Subrouter()
 
 	userRouter.Use(AuthCheckerMiddleWare)
 	userRouter.HandleFunc("/me", handleGetProfile).Methods("GET")

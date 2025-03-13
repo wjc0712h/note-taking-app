@@ -3,50 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note Taking App</title>
+    <title>Notes</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
 </head>
 <body>
-  
-  <h2>Login</h2>
-  <input type="text" id="username" placeholder="Enter username" />
-  <button onclick="login()">Login</button>
-  
-  <h1>Notes</h1>
-  <ul id="notes-list"></ul>
-  <textarea id="note-content" placeholder="write a note.."></textarea>
-  <button onclick="createNote()">submit</button>
-  
-  <script>
-      async function login() {
-          const username = document.getElementById("username").value;
-          const response = await window.api.login(username);
-          if (response.success) {
-              alert("Login successful!");
-              loadNotes(); // Fetch notes after login
-          } else {
-              alert(response.message);
-          }
-        }
+    <div class="app-container">
+        <div class="sidebar">
+            <h1 id="profile">hello</h1>
+            <div id="login">
+                <h2>Login</h2>
+                <div class="input-container">
+                    <input type="text" id="username" placeholder="" />
+                    <button onclick="login()">✔</button> 
+                </div>
+            </div>
+            
+            <h2>Your Notes</h2>
+            <ul id="notes-list"></ul>
+        </div>
+        <div class="main">
+            <h1>New Note</h1>
+            <textarea id="note-content" placeholder="" autofocus></textarea>
+            <button onclick="createNote()">SAVE</button>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="./index.js"></script>
 
-        async function loadNotes() {
-            const notes = await window.api.fetchNotes();
-            const notesList = document.getElementById("notes-list");
-            notesList.innerHTML = "";
-            notes.forEach(note => {
-                const li = document.createElement("li");
-                li.textContent = note.content;
-                notesList.appendChild(li);
-            });
-        }
-
-        async function createNote() {
-            const content = document.getElementById("note-content").value;
-            await window.api.createNote(content);
-            document.getElementById("note-content").value = "";
-            loadNotes();
-        }
-
-        loadNotes();
-    </script>
 </body>
 </html>
