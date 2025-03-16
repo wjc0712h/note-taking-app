@@ -1,4 +1,7 @@
 loadNotes()
+
+const saveBtn = document.getElementById("save-button")
+
 async function login() {
     const username = document.getElementById("username").value;
     const response = await window.api.login(username);
@@ -18,16 +21,57 @@ async function loadNotes() {
     const profile = await window.api.fetchProfile();
     const user = document.getElementById("profile");
     if(profile.username != undefined) {
-        // const login = document.getElementById("login");
         user.innerHTML = profile.username
     }
-
-
     notes.forEach(note => {
         const li = document.createElement("li");
         li.textContent = note.content;
+        li.style.cursor = "pointer";
+
+        li.addEventListener("click", () => {
+            document.getElementById("note-content").value = note.content;
+            document.getElementById("note-title").innerText = note.createdAt;
+            saveBtn.textContent = "UPDATE";
+            saveBtn.className = note.id
+
+
+            const existingDeleteBtn = document.getElementById("delete-button");
+            if (existingDeleteBtn) {
+                existingDeleteBtn.remove();
+            }
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "DELETE";
+            deleteBtn.id = "delete-button";
+            document.getElementById("main").appendChild(deleteBtn);
+
+            deleteBtn.addEventListener("click", deleteNote);
+        });
+
         notesList.appendChild(li);
     });
+}
+async function saveNote() {
+    const content = document.getElementById("note-content").value;
+    
+    if (!content.trim()) return; 
+    if (saveBtn.className) {
+        await window.api.updateNote(saveBtn.className, content);
+
+        saveBtn.className = ""
+        saveBtn.textContent = "SAVE";
+        const existingDeleteBtn = document.getElementById("delete-button");
+        if (existingDeleteBtn) {
+            existingDeleteBtn.remove();
+        }
+        document.getElementById("note-title").innerHTML = "New Note"
+
+    } else {
+        await window.api.createNote(content);
+    }
+
+    document.getElementById("note-content").value = "";
+    loadNotes();
 }
 
 async function createNote() {
@@ -35,4 +79,30 @@ async function createNote() {
     await window.api.createNote(content);
     document.getElementById("note-content").value = "";
     loadNotes();
+}
+
+async function deleteNote() {
+    const noteId = saveBtn.className;
+    if (!noteId) return;
+
+    try {
+        const response = await window.api.deleteNote(noteId);
+        saveBtn.className = ""
+        saveBtn.textContent = "SAVE";
+        const existingDeleteBtn = document.getElementById("delete-button");
+        if (existingDeleteBtn) {
+            existingDeleteBtn.remove();
+        }
+        document.getElementById("note-content").value = "";
+        document.getElementById("note-title").innerHTML = "New Note"
+       
+        if (!response || response.error) {
+            console.error("Failed to delete note:", response?.error || "Unknown error");
+            return;
+        }
+
+        loadNotes();
+    } catch (error) {
+        console.error("Error deleting note:", error);
+    }
 }

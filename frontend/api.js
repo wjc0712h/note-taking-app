@@ -77,8 +77,44 @@ ipcMain.handle("login", async (_, username) => {
       const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
   
       const response = await axios.put(
-        "http://localhost:8080/api/note/",
+        "http://localhost:8080/api/note/create",
         { content },
+        {  headers: { Cookie: cookieString },
+        withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating note:", error);
+      return null;
+    }
+  });
+  ipcMain.handle("update-note", async (_, id,content) => {
+    try {
+      const cookies = await session.defaultSession.cookies.get({ url: "http://localhost:8080" });
+      const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
+  
+      const response = await axios.patch(
+        `http://localhost:8080/api/note/update/${id}`,
+        { content },
+        {  headers: { Cookie: cookieString },
+        withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating note:", error);
+      return null;
+    }
+  });
+
+
+  ipcMain.handle("delete-note", async (_,id) => {
+    try {
+      const cookies = await session.defaultSession.cookies.get({ url: "http://localhost:8080" });
+      const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
+
+      console.log("Deleting note with ID:", id);
+      const response = await axios.delete(
+        `http://localhost:8080/api/note/delete/${id}`,
         {  headers: { Cookie: cookieString },
         withCredentials: true }
       );

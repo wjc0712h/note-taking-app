@@ -10,5 +10,7 @@ contextBridge.exposeInMainWorld("api", {
   //note
   fetchNotes: () => ipcRenderer.invoke("fetch-note"),
   createNote: (content) => ipcRenderer.invoke("create-note", content),
+  updateNote: (id, content) => ipcRenderer.invoke("update-note",id,content),
+  deleteNote: (_,id) => ipcRenderer.invoke("delete-note",_,id)
 });
 

@@ -7,14 +7,22 @@ files
 
 - backend
     - api
-        - auth.go `api/auth`
-        - note.go `api/note`
-        - user.go `api/user`
-
-    - db
+        - auth.go 
+            - <b>api/auth</b>
+                - `/login`
+        - note.go 
+            - <b>api/note</b>
+                - `/all`
+                - `/create`
+                - `/update`
+                - `/delete`
+        - profile.go 
+            - <b>api/profile</b>
+                - `/me`
+    - db (sqlite)
         - db.go
         - note.go
-        - user.go
+        - profile.go
 - fronend
     - electron & axios
 - main.go

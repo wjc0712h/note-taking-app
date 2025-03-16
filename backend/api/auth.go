@@ -44,14 +44,9 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Login successful")
 }
 
-func RegisterAuthRoutes(r *mux.Router) {
-	authRouter := r.PathPrefix("/api/auth").Subrouter()
-	authRouter.HandleFunc("/login", handleLogin).Methods("POST")
-}
-
 func GetUsernameFromCookie(r *http.Request) (string, error) {
-	cookies := r.Cookies()
-	fmt.Println("All Cookies:", cookies)
+	//cookies := r.Cookies()
+	//fmt.Println("All Cookies:", cookies)
 
 	cookie, err := r.Cookie("username")
 	if err != nil {
@@ -59,7 +54,7 @@ func GetUsernameFromCookie(r *http.Request) (string, error) {
 		return "", fmt.Errorf("cookie not found")
 	}
 
-	fmt.Println("Authenticated User:", cookie.Value)
+	//fmt.Println("Authenticated User:", cookie.Value)
 	return cookie.Value, nil
 }
 
@@ -74,4 +69,9 @@ func AuthCheckerMiddleWare(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func RegisterAuthRoutes(r *mux.Router) {
+	authRouter := r.PathPrefix("/api/auth").Subrouter()
+	authRouter.HandleFunc("/login", handleLogin).Methods("POST")
 }

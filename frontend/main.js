@@ -8,6 +8,7 @@ app.whenReady().then(() => {
   mainWindow = new BrowserWindow({
     width: 700,
     height: 600,
+    icon: path.join(__dirname, "icon.icns"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
@@ -15,7 +16,7 @@ app.whenReady().then(() => {
       session: session.defaultSession,
     },
   });
-
+  mainWindow.setWindowButtonVisibility(true);
   mainWindow.loadFile("index.html");
 });
 
