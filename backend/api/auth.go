@@ -21,15 +21,13 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
-	fmt.Println("Login attempt:", user.Username)
 
+	fmt.Println("Login attempt:", user.Username)
 	_, err := db.GetProfile(user.Username)
 	if err != nil {
-		http.Error(w, "User not found", http.StatusUnauthorized)
+		http.Error(w, "profile not found", http.StatusUnauthorized)
 		return
 	}
-
-	// Set authentication cookie
 	http.SetCookie(w, &http.Cookie{
 		Name:     "username",
 		Value:    user.Username,
@@ -38,23 +36,17 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		Secure:   false,
 		SameSite: http.SameSiteNoneMode,
 	})
-
-	fmt.Println("Cookie set for user:", user.Username)
+	fmt.Println("current user:", user.Username)
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "Login successful")
+	fmt.Fprintln(w, "handleLogin() successful")
 }
 
 func GetUsernameFromCookie(r *http.Request) (string, error) {
-	//cookies := r.Cookies()
-	//fmt.Println("All Cookies:", cookies)
-
 	cookie, err := r.Cookie("username")
 	if err != nil {
-		fmt.Println("Cookie retrieval failed:", err)
+		fmt.Println("GetUsernameFromCookie() failed:", err)
 		return "", fmt.Errorf("cookie not found")
 	}
-
-	//fmt.Println("Authenticated User:", cookie.Value)
 	return cookie.Value, nil
 }
 
@@ -63,7 +55,7 @@ func AuthCheckerMiddleWare(next http.Handler) http.Handler {
 		username, err := GetUsernameFromCookie(r)
 
 		if err != nil || username == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, "UNAUTHORIZED", http.StatusUnauthorized)
 			return
 		}
 

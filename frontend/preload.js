@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld("api", {
 
   //profile
   fetchProfile: () => ipcRenderer.invoke("fetch-profile"),
+  createProfile: (username) => ipcRenderer.invoke("create-profile", username),
 
   //note
   fetchNotes: () => ipcRenderer.invoke("fetch-note"),

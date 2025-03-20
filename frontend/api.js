@@ -34,7 +34,20 @@ ipcMain.handle("login", async (_, username) => {
     }
   });
   
-
+  ipcMain.handle("create-profile" , async (_, username) => {
+    try {
+        const response = await axios.post("http://localhost:8080/api/profile/new",
+          { username },
+          { withCredentials: true }
+        );
+      
+        console.log("create-profile Response Headers:", response.headers);
+          return response.data;
+        } catch (error) {
+          console.error("Error creating profile:", error.response?.data || error.message);
+          return [];
+        }
+  })
   ipcMain.handle("fetch-profile" , async () => {
     try {
         const cookies = await session.defaultSession.cookies.get({ url: "http://localhost:8080" });

@@ -19,6 +19,7 @@ files
         - profile.go 
             - <b>api/profile</b>
                 - `/me`
+                - `/new`
     - db (sqlite)
         - db.go
         - note.go

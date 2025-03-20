@@ -11,13 +11,13 @@ import (
 func handleGetProfile(w http.ResponseWriter, r *http.Request) {
 	username, err := GetUsernameFromCookie(r)
 	if err != nil || username == "" {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		http.Error(w, "handleGetProfile(): UNAUTHORIZED ", http.StatusUnauthorized)
 		return
 	}
 
 	user, err := db.GetProfile(username)
 	if err != nil {
-		http.Error(w, "User not found", http.StatusNotFound)
+		http.Error(w, "handleGetProfile(): NOT FOUND", http.StatusNotFound)
 		return
 	}
 
@@ -25,9 +25,38 @@ func handleGetProfile(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-func RegisterProfileRoutes(r *mux.Router) {
-	userRouter := r.PathPrefix("/api/profile").Subrouter()
+func handleCreateProfile(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Username == "" {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
 
-	userRouter.Use(AuthCheckerMiddleWare)
-	userRouter.HandleFunc("/me", handleGetProfile).Methods("GET")
+	_, err := db.GetProfile(req.Username)
+	if err == nil {
+		http.Error(w, "handleCreateProfile(): EXIST", http.StatusConflict)
+		return
+	}
+
+	_, err = db.CreateProfile(req.Username)
+	if err != nil {
+		http.Error(w, "handleCreateProfile(): FAILED", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"message": "handleCreateProfile(): CREATED",
+	})
+}
+
+func RegisterProfileRoutes(r *mux.Router) {
+	profileRouter := r.PathPrefix("/api/profile").Subrouter()
+
+	profileRouter.Use(AuthCheckerMiddleWare)
+	profileRouter.HandleFunc("/me", handleGetProfile).Methods("GET")
+	r.HandleFunc("/api/profile/new", handleCreateProfile).Methods("POST")
 }
