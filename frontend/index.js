@@ -4,18 +4,18 @@ const saveBtn = document.getElementById("save-button")
 
 async function login() {
     const username = document.getElementById("username");
-    const response = await window.api.login(username.value);
+    const res = await window.api.login(username.value);
 
-    if (response.success) {
+    if (res.success) {
         console.log("successfully logged in as ", username.value)
         loadNotes();
         username.value = "";
     } else {
         createProfile(username.value)
     }
-    console.log(response.message);
-    
+    console.log(res.message);
 }
+
 async function createProfile(username) {
     const res = await window.api.createProfile(username);
         if (res.success) {

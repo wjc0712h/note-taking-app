@@ -4,6 +4,24 @@
   "description": "",
   "main": "main.js",
   "type": "commonjs",
+"build": {
+  "appId": "com.note.id",
+  "files": [
+    "dist/**/*",
+    "dist/server",
+     "icon.icns"
+  ],
+  "extraResources": [
+    {
+      "from": "dist/server",
+      "to": "dist/server"
+    }
+  ],
+  "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "icon.icns"
+    }
+},
   "scripts": {
     "start": "electron ."
   },
