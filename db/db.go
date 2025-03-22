@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -11,8 +12,9 @@ import (
 var DB *sql.DB
 
 func InitDBConn() {
-	newDB := CreateDB()
-	db, err := sql.Open("sqlite3", "./db/database.db")
+	dbPath := GetDatabasePath()
+	newDB := CreateDB(dbPath)
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		fmt.Println("connection failed:", err)
 		return
@@ -29,18 +31,25 @@ func InitDBConn() {
 		InitSchema()
 	}
 }
+func GetDatabasePath() string {
+	userDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println("failed to get user directory:", err)
+		return "./db/database.db"
+	}
+	return filepath.Join(userDir, "db", "database.db")
+}
 
-func CreateDB() bool {
-	db := "./db/database.db"
-	if _, err := os.Stat(db); os.IsNotExist(err) {
+func CreateDB(dbPath string) bool {
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 		fmt.Println("database.db not found, creating...")
 
-		if err := os.MkdirAll("./db", os.ModePerm); err != nil {
+		dir := filepath.Dir(dbPath)
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			fmt.Println("failed to create directory:", err)
 			return false
 		}
-
-		file, err := os.Create(db)
+		file, err := os.Create(dbPath)
 		if err != nil {
 			fmt.Println("failed to create database.db:", err)
 			return false

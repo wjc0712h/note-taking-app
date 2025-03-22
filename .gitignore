@@ -18,6 +18,8 @@ go.work.sum
 #frontend
 dist
 node_modules
+release-build
 
 #backend
 *.db
+server
