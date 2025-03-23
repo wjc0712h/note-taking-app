@@ -3,7 +3,7 @@ const path = require("path");
 const { spawn } = require("child_process");
 require('./api')
 
-const fs = require("fs");
+// const fs = require("fs");
 
 let mainWindow;
 let serverProcess
@@ -61,7 +61,7 @@ app.on("window-all-closed", () => {
 app.on("before-quit", async () => {
   try {
     await session.defaultSession.clearStorageData({ storages: ["cookies"] });
-    console.log("Cookies cleared before exit.");
+    console.log("Cookies cleared.");
   } catch (error) {
     console.error("Error clearing cookies:", error);
   } finally {
